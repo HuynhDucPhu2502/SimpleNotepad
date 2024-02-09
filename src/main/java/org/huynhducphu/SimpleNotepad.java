@@ -1,16 +1,16 @@
-package org.HuynhDucPhu;
+package org.huynhducphu;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class SimpleNotepad extends JFrame implements ActionListener {
+    private JFileChooser fileChooser;
+    private File fileChosen;
     private JMenuItem newMenuItem;
     private JMenuItem openMenuItem;
     private JMenuItem saveMenuItem;
@@ -29,10 +29,16 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        setupJFileChooser();
         setJMenuBar(setupMenubar());
         add(setupTextArea());
 
         setVisible(true);
+    }
+    private void setupJFileChooser() {
+        fileChooser = new JFileChooser();
+        fileChosen = null;
+
     }
     private JTextArea setupTextArea() {
         textArea = new JTextArea();
@@ -89,20 +95,21 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         return menuBar;
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == newMenuItem) {
+            fileChosen = null;
             textArea.setText(null);
         } else if (source == exitMenuItem) {
             System.exit(0);
         } else if (source == openMenuItem) {
-            JFileChooser fileChooser = new JFileChooser();
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
-                File filedOpened = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                fileChosen = new File(fileChooser.getSelectedFile().getAbsolutePath());
                 try (
-                        BufferedReader br = new BufferedReader(new FileReader(filedOpened))
+                        BufferedReader br = new BufferedReader(new FileReader(fileChosen))
                         )
                 {
                     String line;
@@ -114,18 +121,19 @@ public class SimpleNotepad extends JFrame implements ActionListener {
                 }
             }
         } else if (source == saveMenuItem) {
-            JFileChooser fileChooser = new JFileChooser();
-            int response = fileChooser.showSaveDialog(null);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                File filedOpened = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                try (
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(filedOpened))
-                        )
-                {
-                    bw.write(textArea.getText());
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
+            if (fileChosen == null) {
+                int response = fileChooser.showSaveDialog(null);
+                if (response == JFileChooser.APPROVE_OPTION)
+                    fileChosen = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                else return;
+            }
+            try (
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(fileChosen))
+            )
+            {
+                bw.write(textArea.getText());
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }
