@@ -94,7 +94,34 @@ public class SimpleNotepad extends JFrame implements ActionListener {
 
         return menuBar;
     }
+    private void aboutUSFrame() {
+        JFrame aboutUs = new JFrame("About us");
+        aboutUs.setLocationRelativeTo(null);
+        aboutUs.setSize(400, 400);
+        aboutUs.setLayout(new BoxLayout(aboutUs.getContentPane(), BoxLayout.Y_AXIS));
+        aboutUs.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        aboutUs.getContentPane().setBackground(Color.green);
 
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setBackground(Color.green);
+        JLabel infoLabel = new JLabel(new ImageIcon(this.getClass().getResource("/images/personIcon.png")));
+
+        infoLabel.setText("Author: Huynh Duc Phu");
+        infoLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        infoLabel.setHorizontalTextPosition(JLabel.CENTER);
+        infoLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+        infoPanel.add(infoLabel);
+
+        JLabel descriptionLabel = new JLabel("This is a simple notepad, it doesn't have many features yet!");
+        descriptionLabel.setFont(new Font(Font.SERIF, Font.PLAIN, 16));
+        infoPanel.add(descriptionLabel);
+
+        aboutUs.add(Box.createVerticalGlue());
+        aboutUs.add(infoPanel);
+        aboutUs.add(Box.createVerticalGlue());
+        aboutUs.setVisible(true);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -135,6 +162,8 @@ public class SimpleNotepad extends JFrame implements ActionListener {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
+        } else if (source == aboutMenuItem) {
+            aboutUSFrame();
         }
     }
 
