@@ -1,11 +1,13 @@
 package org.HuynhDucPhu;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class SimpleNotepad extends JFrame implements ActionListener {
@@ -55,10 +57,10 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         saveMenuItem.addActionListener(this);
         exitMenuItem.addActionListener(this);
 
-        newMenuItem.setIcon(new ImageIcon("src/main/resources/images/addIcon.png"));
-        openMenuItem.setIcon(new ImageIcon("src/main/resources/images/openIcon.png"));
-        saveMenuItem.setIcon(new ImageIcon("src/main/resources/images/saveIcon.png"));
-        exitMenuItem.setIcon(new ImageIcon("src/main/resources/images/exitIcon.png"));
+        newMenuItem.setIcon(new ImageIcon(SimpleNotepad.class.getResource("/images/addIcon.png")));
+        openMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/openIcon.png")));
+        saveMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/saveIcon.png")));
+        exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/exitIcon.png")));
 
         newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
@@ -77,8 +79,8 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         contentMenuItem.addActionListener(this);
         aboutMenuItem.addActionListener(this);
 
-        contentMenuItem.setIcon(new ImageIcon("src/main/resources/images/contentIcon.png"));
-        aboutMenuItem.setIcon(new ImageIcon("src/main/resources/images/aboutIcon.png"));
+        contentMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/contentIcon.png")));
+        aboutMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/aboutIcon.png")));
 
         helpMenu.add(contentMenuItem);
         helpMenu.addSeparator();
@@ -86,7 +88,6 @@ public class SimpleNotepad extends JFrame implements ActionListener {
 
         return menuBar;
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
