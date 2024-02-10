@@ -17,6 +17,7 @@ public class SimpleNotepad extends JFrame implements ActionListener {
     private JMenuItem exitMenuItem;
     private JMenuItem contentMenuItem;
     private JMenuItem aboutMenuItem;
+
     private JTextArea textArea;
 
     public SimpleNotepad() throws HeadlessException {
@@ -28,6 +29,7 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
 
         setupJFileChooser();
         setJMenuBar(setupMenubar());
@@ -40,9 +42,14 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         fileChosen = null;
 
     }
-    private JTextArea setupTextArea() {
+    private JScrollPane setupTextArea() {
         textArea = new JTextArea();
-        return textArea;
+        textArea.setFont(new Font(Font.SERIF, Font.PLAIN, 24));
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        return scrollPane;
     }
     private JMenuBar setupMenubar() {
         JMenuBar menuBar = new JMenuBar();
@@ -63,7 +70,7 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         saveMenuItem.addActionListener(this);
         exitMenuItem.addActionListener(this);
 
-        newMenuItem.setIcon(new ImageIcon(SimpleNotepad.class.getResource("/images/addIcon.png")));
+        newMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/addIcon.png")));
         openMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/openIcon.png")));
         saveMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/saveIcon.png")));
         exitMenuItem.setIcon(new ImageIcon(getClass().getResource("/images/exitIcon.png")));
@@ -132,9 +139,11 @@ public class SimpleNotepad extends JFrame implements ActionListener {
         } else if (source == exitMenuItem) {
             System.exit(0);
         } else if (source == openMenuItem) {
+            fileChosen = null;
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
-                fileChosen = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                fileChosen = fileChooser.getSelectedFile().getAbsoluteFile();
+                textArea.setText(null);
                 try (
                         BufferedReader br = new BufferedReader(new FileReader(fileChosen))
                         )
@@ -151,7 +160,7 @@ public class SimpleNotepad extends JFrame implements ActionListener {
             if (fileChosen == null) {
                 int response = fileChooser.showSaveDialog(null);
                 if (response == JFileChooser.APPROVE_OPTION)
-                    fileChosen = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                    fileChosen = fileChooser.getSelectedFile().getAbsoluteFile();
                 else return;
             }
             try (
